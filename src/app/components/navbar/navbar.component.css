@@ -1,0 +1,77 @@
+/* Estilo general de la barra de navegación */
+.navbar {
+  background: linear-gradient(90deg, #b3e5fc, #81d4fa);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Marca del sitio */
+.nav-link,
+.dropdown-item {
+  cursor: pointer !important;
+}
+
+.navbar-brand {
+  color: #0277bd !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #01579b !important;
+}
+
+/* Enlaces de navegación */
+.nav-link {
+  color: #01579b !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff !important;
+  background-color: #4fc3f7;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+
+/* Enlace activo */
+.nav-link.active {
+  color: #ffffff !important;
+  background-color: #0288d1;
+  border-radius: 8px;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #e1f5fe;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  color: #01579b;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #4fc3f7;
+  color: #fff;
+}
+
+/* Ícono del toggler (para móvil) */
+.navbar-toggler {
+  border: none;
+  background-color: #4fc3f7;
+}
+
+
+/* Ítem deshabilitado */
+.nav-link.disabled {
+  color: #90a4ae !important;
+  opacity: 0.7;
+}

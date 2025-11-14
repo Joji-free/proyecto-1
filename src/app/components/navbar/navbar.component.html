@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+
+    <!-- LOGO A LA IZQUIERDA -->
+    <a class="navbar-brand d-flex align-items-center" routerLink="/home">
+      <img src="/assets/sinFondo.png" alt="MimirPetShop Logo" style="height: 70px; width: 250px; margin-right: 8px;">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <!-- MENÚ A LA DERECHA -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home">Inicio</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Productos
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/productos/accesorios">Accesorios</a></li>
+            <li><a class="dropdown-item" routerLink="/productos/alimento">Alimento</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" routerLink="/productos/popular">Lo más Popular</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/nosotros">Nosotros</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contactos">Contactos</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login">Iniciar Sesión</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/metodos-pago">Métodos de Pago</a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
