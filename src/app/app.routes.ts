@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AccesoriosComponent } from './components/pages/accesorios/accesorios.component';
 import { AlimentoComponent } from './components/pages/alimento/alimento.component';
 import { RegisterComponent } from './components/pages/register/register.component';
+import { AdminPanelComponent } from './components/pages/admin-panel/admin-panel.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'contactos', component: ContactosComponent },
   { path: 'login', component: LoginComponent },
   { path: 'metodos-pago', component: MetodosPagoComponent },
+  { path: 'admin', component: AdminPanelComponent },
 
   // Ruta por si se equivocan
   { path: '**', redirectTo: 'home' }

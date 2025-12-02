@@ -48,23 +48,5 @@ export class AlimentoComponent implements OnInit {
       }
     );
   }
-
-  setConfirm(id: any){
-    this.confirmingId = id;
-  }
-
-  borrarAlimento(id: String){
-    this._alimentoService.deleteAlimento(id).subscribe(
-      response=> {
-          if (response.producto){
-            this._router.navigate(['alimentos']);
-            this.getAlimentos();
-      }
-    },
-    error => {
-      console.log(<any>error);
-    }
-    )
-  }
 }
 

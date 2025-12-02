@@ -1,0 +1,244 @@
+<app-navbar></app-navbar>
+<br><br>
+<div class="admin-container">
+  <h1>Panel de Administración</h1>
+
+  <!-- ========== MENSAJES DE ESTADO ========== -->
+  <div class="message" *ngIf="status === 'success_create'" class="alert alert-success">
+    ✓ Producto creado exitosamente
+  </div>
+  <div class="message" *ngIf="status === 'success_update'" class="alert alert-success">
+    ✓ Producto actualizado exitosamente
+  </div>
+  <div class="message" *ngIf="status === 'success_delete'" class="alert alert-success">
+    ✓ Producto eliminado exitosamente
+  </div>
+  <div class="message" *ngIf="status === 'error'" class="alert alert-danger">
+    ✗ Error al procesar la solicitud
+  </div>
+  <div class="message" *ngIf="status === 'error_form'" class="alert alert-warning">
+    ✗ Por favor completa todos los campos
+  </div>
+  <div class="message" *ngIf="status === 'error_imagen'" class="alert alert-warning">
+    ✗ Error al subir la imagen
+  </div>
+
+  <!-- ========== TABS DE NAVEGACIÓN ========== -->
+  <div class="tabs-container">
+    <button class="tab-btn" [class.active]="tipo === 'alimento'" (click)="tipo = 'alimento'">
+      <i class="bi bi-egg"></i> Alimentos
+    </button>
+    <button class="tab-btn" [class.active]="tipo === 'accesorio'" (click)="tipo = 'accesorio'">
+      <i class="bi bi-bag"></i> Accesorios
+    </button>
+  </div>
+
+  <!-- ========== SECCIÓN ALIMENTOS ========== -->
+  <div *ngIf="tipo === 'alimento'" class="section-content">
+    <div class="header-section">
+      <h2>Gestión de Alimentos</h2>
+      <button class="btn btn-primary" (click)="abrirModalAlimento()">
+        <i class="bi bi-plus-circle"></i> Nuevo Alimento
+      </button>
+    </div>
+
+    <!-- Tabla de alimentos -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Animal</th>
+            <th>Sabor</th>
+            <th>Kg</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alimento of alimentos">
+            <td>
+              <img *ngIf="alimento.imagen" [src]="url + 'get-imagen/' + alimento.imagen" 
+                   class="table-image" [alt]="alimento.nombre">
+              <span *ngIf="!alimento.imagen" class="no-image">Sin imagen</span>
+            </td>
+            <td>{{ alimento.nombre }}</td>
+            <td>{{ alimento.animal }}</td>
+            <td>{{ alimento.sabor }}</td>
+            <td>{{ alimento.kg }} kg</td>
+            <td>${{ alimento.precio }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-sm btn-warning" (click)="abrirModalAlimento(alimento)">
+                  <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="eliminarAlimento(alimento._id)">
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="alimentos.length === 0" class="no-data">
+      <p>No hay alimentos registrados</p>
+    </div>
+  </div>
+
+  <!-- ========== SECCIÓN ACCESORIOS ========== -->
+  <div *ngIf="tipo === 'accesorio'" class="section-content">
+    <div class="header-section">
+      <h2>Gestión de Accesorios</h2>
+      <button class="btn btn-primary" (click)="abrirModalAccesorio()">
+        <i class="bi bi-plus-circle"></i> Nuevo Accesorio
+      </button>
+    </div>
+
+    <!-- Tabla de accesorios -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let accesorio of accesorios">
+            <td>
+              <img *ngIf="accesorio.imagen" [src]="url + 'get-imagen/' + accesorio.imagen" 
+                   class="table-image" [alt]="accesorio.nombre">
+              <span *ngIf="!accesorio.imagen" class="no-image">Sin imagen</span>
+            </td>
+            <td>{{ accesorio.nombre }}</td>
+            <td>{{ accesorio.tipo }}</td>
+            <td>${{ accesorio.precio }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-sm btn-warning" (click)="abrirModalAccesorio(accesorio)">
+                  <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="eliminarAccesorio(accesorio._id)">
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="accesorios.length === 0" class="no-data">
+      <p>No hay accesorios registrados</p>
+    </div>
+  </div>
+
+  <!-- ========== MODAL FORMULARIO ========== -->
+  <div class="modal" *ngIf="mostrarModal" [class.show]="mostrarModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>{{ modalTitulo }}</h2>
+        <button class="btn-close" (click)="cerrarModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- FORMULARIO ALIMENTO -->
+        <form *ngIf="tipo === 'alimento'" #formaAlimento="ngForm" (ngSubmit)="guardarAlimento(formaAlimento)">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" 
+                   [(ngModel)]="alimentoForm.nombre" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="animal">Animal:</label>
+            <input type="text" id="animal" name="animal" 
+                   [(ngModel)]="alimentoForm.animal" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="sabor">Sabor:</label>
+            <input type="text" id="sabor" name="sabor" 
+                   [(ngModel)]="alimentoForm.sabor" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="kg">Kg:</label>
+            <input type="number" id="kg" name="kg" 
+                   [(ngModel)]="alimentoForm.kg" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" 
+                   [(ngModel)]="alimentoForm.precio" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="imagen">Imagen:</label>
+            <input type="file" id="imagen" #archivoImagen 
+                   (change)="manejarImagenAlimento($event)" class="form-control">
+            <small *ngIf="alimentoEditando && alimentoEditando.imagen" class="text-muted">
+              Imagen actual: {{ alimentoEditando.imagen }}
+            </small>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!formaAlimento.valid">
+              {{ alimentoEditando ? 'Actualizar' : 'Crear' }}
+            </button>
+          </div>
+        </form>
+
+        <!-- FORMULARIO ACCESORIO -->
+        <form *ngIf="tipo === 'accesorio'" #formaAccesorio="ngForm" (ngSubmit)="guardarAccesorio(formaAccesorio)">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" 
+                   [(ngModel)]="accesorioForm.nombre" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo" name="tipo" 
+                   [(ngModel)]="accesorioForm.tipo" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" 
+                   [(ngModel)]="accesorioForm.precio" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="imagen">Imagen:</label>
+            <input type="file" id="imagen" #archivoImagen 
+                   (change)="manejarImagenAccesorio($event)" class="form-control">
+            <small *ngIf="accesorioEditando && accesorioEditando.imagen" class="text-muted">
+              Imagen actual: {{ accesorioEditando.imagen }}
+            </small>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!formaAccesorio.valid">
+              {{ accesorioEditando ? 'Actualizar' : 'Crear' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay del modal -->
+  <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()"></div>
+</div>
+<br><br><br><br>
+<app-footer></app-footer>

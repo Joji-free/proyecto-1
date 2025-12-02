@@ -25,24 +25,6 @@
           <p *ngIf="accesorio.tipo"><strong>Tipo:</strong> {{ accesorio.tipo }}</p>
           <p class="card-price"><strong>${{ accesorio.precio }}</strong></p>
         </div>
-
-        <div class="card-actions" *ngIf="confirmingId !== accesorio._id">
-          <button type="button" class="btn btn-delete" (click)="setConfirm(accesorio._id)">
-            🗑️ Eliminar
-          </button>
-        </div>
-
-        <div class="card-confirm" *ngIf="confirmingId === accesorio._id">
-          <p class="confirm-text">¿Estás seguro?</p>
-          <div class="confirm-actions">
-            <button type="button" class="btn btn-cancel" (click)="setConfirm(null)">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-confirm-delete" (click)="borrarAccesorio(accesorio._id)">
-              Sí, eliminar
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

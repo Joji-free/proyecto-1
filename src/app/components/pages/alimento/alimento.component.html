@@ -25,24 +25,6 @@
           <p><strong>Peso:</strong> {{ alimento.kg }} kg</p>
           <p class="card-price"><strong>${{ alimento.precio }}</strong></p>
         </div>
-
-        <div class="card-actions" *ngIf="confirmingId !== alimento._id">
-          <button type="button" class="btn btn-delete" (click)="setConfirm(alimento._id)">
-            🗑️ Eliminar
-          </button>
-        </div>
-
-        <div class="card-confirm" *ngIf="confirmingId === alimento._id">
-          <p class="confirm-text">¿Estás seguro?</p>
-          <div class="confirm-actions">
-            <button type="button" class="btn btn-cancel" (click)="setConfirm(null)">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-confirm-delete" (click)="borrarAlimento(alimento._id)">
-              Sí, eliminar
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

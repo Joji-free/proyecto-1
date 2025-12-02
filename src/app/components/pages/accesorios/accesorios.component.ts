@@ -40,21 +40,4 @@ export class AccesoriosComponent implements OnInit {
       }
     );
   }
-
-  setConfirm(id: any) {
-    this.confirmingId = id;
-  }
-
-  borrarAccesorio(id: String) {
-    this._accesoriosService.deleteAccesorio(id).subscribe(
-      response => {
-        if (response.accesorio) {
-          this.getAccesorios();
-        }
-      },
-      error => {
-        console.log(<any>error);
-      }
-    );
-  }
 }
