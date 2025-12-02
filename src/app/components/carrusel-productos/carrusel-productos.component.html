@@ -1,0 +1,49 @@
+<div class="carrusel-container" *ngIf="productos && productos.length > 0">
+  <h2 class="carrusel-title">Productos Más Vendidos</h2>
+  
+  <div class="carrusel-wrapper">
+    <!-- Indicadores -->
+    <div class="pagination">
+      <span class="dot" 
+            [class.active]="i === currentIndex" 
+            *ngFor="let producto of productos; let i = index">
+      </span>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+      <button (click)="prev()" title="Anterior">˄</button>
+      <button (click)="togglePause()" [title]="isPaused ? 'Reanudar' : 'Pausar'">
+        {{ isPaused ? '▶' : '❚❚' }}
+      </button>
+      <button (click)="next()" title="Siguiente">˅</button>
+    </div>
+
+    <!-- Contenedor de cartas -->
+    <div class="card-wrapper">
+      <div class="card" 
+           *ngFor="let producto of productos; let i = index" 
+           [class.active]="i === currentIndex"
+           [class.prev]="i === prevIndex" 
+           [class.next]="i === nextIndex">
+
+        <div class="image-box">
+          <img *ngIf="producto.imagen" 
+               [src]="url + 'get-imagen/' + producto.imagen" 
+               [alt]="producto.nombre">
+          <img *ngIf="!producto.imagen" 
+               src="https://via.placeholder.com/600x400?text=Producto" 
+               alt="Sin imagen">
+        </div>
+
+        <div class="content">
+          <h3>{{ producto.nombre }}</h3>
+          <p><strong>Animal:</strong> {{ producto.animal }}</p>
+          <p><strong>Sabor:</strong> {{ producto.sabor }}</p>
+          <p><strong>Peso:</strong> {{ producto.kg }} kg</p>
+          <p class="price"><strong>${{ producto.precio }}</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

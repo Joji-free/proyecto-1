@@ -1,0 +1,229 @@
+.carrusel-container {
+  position: relative;
+  width: 100%;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  margin: 40px 0;
+  border-radius: 20px;
+}
+
+.carrusel-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.carrusel-wrapper {
+  position: relative;
+  width: 500px;
+  height: 420px;
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Contenedor de cartas */
+.card-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+/* Carta base */
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 30px;
+  padding: 24px;
+  opacity: 0;
+  transform: translateY(100%) scale(0.85) rotateY(20deg);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Carta activa */
+.card.active {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotateY(0deg);
+  z-index: 3;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Carta anterior */
+.card.prev {
+  opacity: 0;
+  transform: translateY(-100%) scale(0.85) rotateY(-20deg);
+  z-index: 2;
+}
+
+/* Carta siguiente */
+.card.next {
+  opacity: 0.4;
+  transform: translateY(100%) scale(0.85) rotateY(20deg);
+  z-index: 1;
+  filter: blur(2px);
+}
+
+/* Imagen */
+.image-box {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: transform 0.6s ease;
+}
+
+.card.active .image-box img {
+  transform: scale(1.05);
+}
+
+/* Contenido */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content h3 {
+  margin: 0 0 12px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.content p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.content strong {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.price {
+  font-size: 18px !important;
+  color: #667eea !important;
+  margin-top: 8px !important;
+}
+
+/* Indicadores */
+.pagination {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  z-index: 5;
+  justify-content: center;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: #cbd5e0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dot:hover {
+  background: #a0aec0;
+  transform: scale(1.2);
+}
+
+.dot.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 32px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Controles */
+.controls {
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 5;
+}
+
+.controls button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #667eea;
+  background: white;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.controls button:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.controls button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 768px) {
+  .carrusel-wrapper {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .controls {
+    right: -60px;
+  }
+
+  .carrusel-title {
+    font-size: 24px;
+  }
+}

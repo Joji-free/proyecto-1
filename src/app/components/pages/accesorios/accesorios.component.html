@@ -1,2 +1,55 @@
 <app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-5">Accesorios para Mascotas</h1>
+  
+  <div class="accesorios-grid">
+    <div class="accesorio-card" *ngFor="let accesorio of accesorios">
+      <div class="card-image-wrapper">
+        <img *ngIf="accesorio.imagen" 
+             [src]="url + 'get-imagen/' + accesorio.imagen" 
+             [alt]="accesorio.nombre" 
+             class="card-image">
+        <img *ngIf="!accesorio.imagen" 
+             src="https://via.placeholder.com/250x200?text=Sin+imagen" 
+             alt="Sin imagen" 
+             class="card-image">
+      </div>
+
+      <div class="card-content">
+        <h5 class="card-title">{{ accesorio.nombre }}</h5>
+        <p class="card-subtitle">Accesorio</p>
+        
+        <div class="card-details">
+          <p *ngIf="accesorio.categoria"><strong>Categoría:</strong> {{ accesorio.categoria }}</p>
+          <p *ngIf="accesorio.tipo"><strong>Tipo:</strong> {{ accesorio.tipo }}</p>
+          <p class="card-price"><strong>${{ accesorio.precio }}</strong></p>
+        </div>
+
+        <div class="card-actions" *ngIf="confirmingId !== accesorio._id">
+          <button type="button" class="btn btn-delete" (click)="setConfirm(accesorio._id)">
+            🗑️ Eliminar
+          </button>
+        </div>
+
+        <div class="card-confirm" *ngIf="confirmingId === accesorio._id">
+          <p class="confirm-text">¿Estás seguro?</p>
+          <div class="confirm-actions">
+            <button type="button" class="btn btn-cancel" (click)="setConfirm(null)">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-confirm-delete" (click)="borrarAccesorio(accesorio._id)">
+              Sí, eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!accesorios || accesorios.length === 0" class="text-center mt-5">
+    <p>Cargando accesorios...</p>
+  </div>
+</div>
+
 <app-footer></app-footer>

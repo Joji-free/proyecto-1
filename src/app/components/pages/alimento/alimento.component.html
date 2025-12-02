@@ -1,2 +1,55 @@
 <app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-5">Alimentos para Mascotas</h1>
+  
+  <div class="alimentos-grid">
+    <div class="alimento-card" *ngFor="let alimento of alimentos">
+      <div class="card-image-wrapper">
+        <img *ngIf="alimento.imagen" 
+             [src]="url + 'get-imagen/' + alimento.imagen" 
+             [alt]="alimento.nombre" 
+             class="card-image">
+        <img *ngIf="!alimento.imagen" 
+             src="https://via.placeholder.com/250x200?text=Sin+imagen" 
+             alt="Sin imagen" 
+             class="card-image">
+      </div>
+
+      <div class="card-content">
+        <h5 class="card-title">{{ alimento.nombre }}</h5>
+        <p class="card-subtitle">{{ alimento.animal }}</p>
+        
+        <div class="card-details">
+          <p><strong>Sabor:</strong> {{ alimento.sabor }}</p>
+          <p><strong>Peso:</strong> {{ alimento.kg }} kg</p>
+          <p class="card-price"><strong>${{ alimento.precio }}</strong></p>
+        </div>
+
+        <div class="card-actions" *ngIf="confirmingId !== alimento._id">
+          <button type="button" class="btn btn-delete" (click)="setConfirm(alimento._id)">
+            🗑️ Eliminar
+          </button>
+        </div>
+
+        <div class="card-confirm" *ngIf="confirmingId === alimento._id">
+          <p class="confirm-text">¿Estás seguro?</p>
+          <div class="confirm-actions">
+            <button type="button" class="btn btn-cancel" (click)="setConfirm(null)">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-confirm-delete" (click)="borrarAlimento(alimento._id)">
+              Sí, eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!alimentos || alimentos.length === 0" class="text-center mt-5">
+    <p>Cargando alimentos...</p>
+  </div>
+</div>
+
 <app-footer></app-footer>
