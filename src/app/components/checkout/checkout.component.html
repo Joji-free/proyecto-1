@@ -1,0 +1,20 @@
+<div class="checkout-container">
+  <h2>Checkout</h2>
+  <p *ngIf="(cart?.items?.length || 0) === 0">Tu carrito está vacío.</p>
+
+  <div *ngIf="(cart?.items?.length || 0) > 0">
+    <div class="cart-list">
+      <div class="cart-item" *ngFor="let it of cart.items">
+        <div class="thumb"><img *ngIf="it.imagen" [src]="(it.imagen? ('http://localhost:3600/get-imagen/' + it.imagen) : '')" alt=""/></div>
+        <div class="meta">
+          <div class="name">{{ it.nombre || it.name }}</div>
+          <div class="qty">Cantidad: {{ it.qty || it.quantity || 1 }}</div>
+        </div>
+        <div class="price">{{ (it.precio || it.price || 0) | number:'1.2-2' }} USD</div>
+      </div>
+    </div>
+
+    <p class="total">Total: <strong>{{ total | number:'1.2-2' }}</strong> USD</p>
+    <div id="paypal-button-container"></div>
+  </div>
+</div>

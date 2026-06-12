@@ -53,6 +53,7 @@
             <th>Sabor</th>
             <th>Kg</th>
             <th>Precio</th>
+            <th>Stock</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -68,6 +69,7 @@
             <td>{{ alimento.sabor }}</td>
             <td>{{ alimento.kg }} kg</td>
             <td>${{ alimento.precio }}</td>
+            <td>{{ alimento.stock }}</td>
             <td>
               <div class="action-buttons">
                 <button class="btn btn-sm btn-warning" (click)="abrirModalAlimento(alimento)">
@@ -104,8 +106,10 @@
           <tr>
             <th>Imagen</th>
             <th>Nombre</th>
+            <th>Animal</th>
             <th>Tipo</th>
             <th>Precio</th>
+            <th>Stock</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -117,8 +121,10 @@
               <span *ngIf="!accesorio.imagen" class="no-image">Sin imagen</span>
             </td>
             <td>{{ accesorio.nombre }}</td>
+            <td>{{accesorio.animal}}</td>
             <td>{{ accesorio.tipo }}</td>
             <td>${{ accesorio.precio }}</td>
+            <td>{{ accesorio.stock }}</td>
             <td>
               <div class="action-buttons">
                 <button class="btn btn-sm btn-warning" (click)="abrirModalAccesorio(accesorio)">
@@ -148,6 +154,10 @@
       </div>
 
       <div class="modal-body">
+        <div class="message" *ngIf="status === 'error_form'" class="alert alert-warning">
+          ✗ Completa primero todos los campos obligatorios para continuar.
+        </div>
+
         <!-- FORMULARIO ALIMENTO -->
         <form *ngIf="tipo === 'alimento'" #formaAlimento="ngForm" (ngSubmit)="guardarAlimento(formaAlimento)">
           <div class="form-group">
@@ -181,6 +191,12 @@
           </div>
 
           <div class="form-group">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" min="0"
+                   [(ngModel)]="alimentoForm.stock" required class="form-control">
+          </div>
+
+          <div class="form-group">
             <label for="imagen">Imagen:</label>
             <input type="file" id="imagen" #archivoImagen 
                    (change)="manejarImagenAlimento($event)" class="form-control">
@@ -191,7 +207,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="!formaAlimento.valid">
+            <button type="submit" class="btn btn-primary">
               {{ alimentoEditando ? 'Actualizar' : 'Crear' }}
             </button>
           </div>
@@ -203,6 +219,12 @@
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" 
                    [(ngModel)]="accesorioForm.nombre" required class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoria:</label>
+            <input type="text" id="categoria" name="categoria"
+                   [(ngModel)]="accesorioForm.categoria" required class="form-control">
           </div>
 
           <div class="form-group">
@@ -218,6 +240,12 @@
           </div>
 
           <div class="form-group">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" min="0"
+                   [(ngModel)]="accesorioForm.stock" required class="form-control">
+          </div>
+
+          <div class="form-group">
             <label for="imagen">Imagen:</label>
             <input type="file" id="imagen" #archivoImagen 
                    (change)="manejarImagenAccesorio($event)" class="form-control">
@@ -228,7 +256,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="!formaAccesorio.valid">
+            <button type="submit" class="btn btn-primary">
               {{ accesorioEditando ? 'Actualizar' : 'Crear' }}
             </button>
           </div>

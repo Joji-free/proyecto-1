@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Global } from '../../../services/global';
 import { AlimentoService } from '../../../services/alimento.service';
@@ -12,7 +11,7 @@ import { CargarService } from '../../../services/cargar.service';
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, CommonModule, HttpClientModule, FormsModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule],
   templateUrl: './admin-panel.component.html',
   styleUrl: './admin-panel.component.css',
   providers: [AlimentoService, AccesoriosService, CargarService]
@@ -33,6 +32,7 @@ export class AdminPanelComponent implements OnInit {
     sabor: '',
     kg: '',
     precio: '',
+    stock: '',
     imagen: ''
   };
   public alimentoEditando: any = null;
@@ -45,6 +45,7 @@ export class AdminPanelComponent implements OnInit {
     categoria: '',
     tipo: '',
     precio: '',
+    stock: '',
     imagen: ''
   };
   public accesorioEditando: any = null;
@@ -53,6 +54,7 @@ export class AdminPanelComponent implements OnInit {
   // ========== MODAL ==========
   public mostrarModal: boolean = false;
   public modalTitulo: string = '';
+  private statusTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private _alimentoService: AlimentoService,
@@ -65,6 +67,36 @@ export class AdminPanelComponent implements OnInit {
   ngOnInit(): void {
     this.cargarAlimentos();
     this.cargarAccesorios();
+  }
+
+  private mostrarEstadoTemporal(estado: string, duracionMs: number = 2500) {
+    this.status = estado;
+
+    if (this.statusTimer) {
+      clearTimeout(this.statusTimer);
+    }
+
+    this.statusTimer = setTimeout(() => {
+      if (this.status === estado) {
+        this.status = '';
+      }
+    }, duracionMs);
+  }
+
+  private manejarError(error: any, operacion: string = 'operación') {
+    this.status = 'error';
+    
+    const statusCode = error?.status || 'desconocido';
+    const errorMsg = error?.error?.message || error?.statusText || error?.message || 'Error desconocido';
+    const fullError = `HTTP ${statusCode}: ${errorMsg}`;
+    
+    console.error(`[ADMIN PANEL] ❌ Error en ${operacion}`);
+    console.error(`[ADMIN PANEL] Código HTTP: ${statusCode}`);
+    console.error(`[ADMIN PANEL] Mensaje: ${errorMsg}`);
+    console.error(`[ADMIN PANEL] Token en localStorage: ${localStorage.getItem('token') ? 'SÍ' : 'NO'}`);
+    console.error(`[ADMIN PANEL] Error completo:`, error);
+    
+    alert(`Error: ${fullError}\n\nPor favor revisa la consola (F12) para más detalles.`);
   }
 
   // ============================================
@@ -98,6 +130,7 @@ export class AdminPanelComponent implements OnInit {
         sabor: '',
         kg: '',
         precio: '',
+        stock: '',
         imagen: ''
       };
       this.modalTitulo = 'Nuevo Alimento';
@@ -108,6 +141,8 @@ export class AdminPanelComponent implements OnInit {
   guardarAlimento(form: NgForm) {
     if (!form.valid) {
       this.status = 'error_form';
+      Object.keys(form.controls).forEach(controlName => form.controls[controlName].markAsTouched());
+      alert('Completa todos los campos obligatorios antes de crear o actualizar el producto.');
       return;
     }
 
@@ -123,7 +158,7 @@ export class AdminPanelComponent implements OnInit {
               this.archivosAlimento,
               'imagen'
             ).then(() => {
-              this.status = 'success_update';
+              this.mostrarEstadoTemporal('success_update');
               this.cargarAlimentos();
               this.cerrarModal();
             }).catch(error => {
@@ -131,14 +166,13 @@ export class AdminPanelComponent implements OnInit {
               console.log(error);
             });
           } else {
-            this.status = 'success_update';
+            this.mostrarEstadoTemporal('success_update');
             this.cargarAlimentos();
             this.cerrarModal();
           }
         },
         error => {
-          this.status = 'error';
-          console.log(error);
+          this.manejarError(error, 'actualizar alimento');
         }
       );
     } else {
@@ -153,7 +187,7 @@ export class AdminPanelComponent implements OnInit {
                 this.archivosAlimento,
                 'imagen'
               ).then(() => {
-                this.status = 'success_create';
+                this.mostrarEstadoTemporal('success_create');
                 this.cargarAlimentos();
                 form.reset();
                 this.cerrarModal();
@@ -162,7 +196,7 @@ export class AdminPanelComponent implements OnInit {
                 console.log(error);
               });
             } else {
-              this.status = 'success_create';
+              this.mostrarEstadoTemporal('success_create');
               this.cargarAlimentos();
               form.reset();
               this.cerrarModal();
@@ -170,8 +204,7 @@ export class AdminPanelComponent implements OnInit {
           }
         },
         error => {
-          this.status = 'error';
-          console.log(error);
+          this.manejarError(error, 'crear alimento');
         }
       );
     }
@@ -181,12 +214,11 @@ export class AdminPanelComponent implements OnInit {
     if (confirm('¿Estás seguro de que deseas eliminar este alimento?')) {
       this._alimentoService.deleteAlimento(id).subscribe(
         response => {
-          this.status = 'success_delete';
+          this.mostrarEstadoTemporal('success_delete');
           this.cargarAlimentos();
         },
         error => {
-          this.status = 'error';
-          console.log(error);
+          this.manejarError(error);
         }
       );
     }
@@ -222,6 +254,7 @@ export class AdminPanelComponent implements OnInit {
         categoria: '',
         tipo: '',
         precio: '',
+        stock: '',
         imagen: ''
       };
       this.modalTitulo = 'Nuevo Accesorio';
@@ -232,6 +265,8 @@ export class AdminPanelComponent implements OnInit {
   guardarAccesorio(form: NgForm) {
     if (!form.valid) {
       this.status = 'error_form';
+      Object.keys(form.controls).forEach(controlName => form.controls[controlName].markAsTouched());
+      alert('Completa todos los campos obligatorios antes de crear o actualizar el accesorio.');
       return;
     }
 
@@ -247,7 +282,7 @@ export class AdminPanelComponent implements OnInit {
               this.archivosAccesorio,
               'imagen'
             ).then(() => {
-              this.status = 'success_update';
+              this.mostrarEstadoTemporal('success_update');
               this.cargarAccesorios();
               this.cerrarModal();
             }).catch(error => {
@@ -255,14 +290,13 @@ export class AdminPanelComponent implements OnInit {
               console.log(error);
             });
           } else {
-            this.status = 'success_update';
+            this.mostrarEstadoTemporal('success_update');
             this.cargarAccesorios();
             this.cerrarModal();
           }
         },
         error => {
-          this.status = 'error';
-          console.log(error);
+          this.manejarError(error, 'actualizar accesorio');
         }
       );
     } else {
@@ -277,7 +311,7 @@ export class AdminPanelComponent implements OnInit {
                 this.archivosAccesorio,
                 'imagen'
               ).then(() => {
-                this.status = 'success_create';
+                this.mostrarEstadoTemporal('success_create');
                 this.cargarAccesorios();
                 form.reset();
                 this.cerrarModal();
@@ -286,7 +320,7 @@ export class AdminPanelComponent implements OnInit {
                 console.log(error);
               });
             } else {
-              this.status = 'success_create';
+              this.mostrarEstadoTemporal('success_create');
               this.cargarAccesorios();
               form.reset();
               this.cerrarModal();
@@ -294,8 +328,7 @@ export class AdminPanelComponent implements OnInit {
           }
         },
         error => {
-          this.status = 'error';
-          console.log(error);
+          this.manejarError(error, 'crear accesorio');
         }
       );
     }
@@ -305,12 +338,11 @@ export class AdminPanelComponent implements OnInit {
     if (confirm('¿Estás seguro de que deseas eliminar este accesorio?')) {
       this._accesoriosService.deleteAccesorio(id).subscribe(
         response => {
-          this.status = 'success_delete';
+          this.mostrarEstadoTemporal('success_delete');
           this.cargarAccesorios();
         },
         error => {
-          this.status = 'error';
-          console.log(error);
+          this.manejarError(error, 'eliminar accesorio');
         }
       );
     }

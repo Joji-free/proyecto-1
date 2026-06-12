@@ -20,30 +20,23 @@
     </div>
 
     <!-- Contenedor de cartas -->
-    <div class="card-wrapper">
-      <div class="card" 
-           *ngFor="let producto of productos; let i = index" 
-           [class.active]="i === currentIndex"
-           [class.prev]="i === prevIndex" 
-           [class.next]="i === nextIndex">
+      <div class="card-wrapper">
+        <div class="card"
+             *ngFor="let producto of productos; let i = index"
+             [class.active]="i === currentIndex"
+             [class.prev]="i === prevIndex"
+             [class.next]="i === nextIndex">
 
-        <div class="image-box">
-          <img *ngIf="producto.imagen" 
-               [src]="url + 'get-imagen/' + producto.imagen" 
-               [alt]="producto.nombre">
-          <img *ngIf="!producto.imagen" 
-               src="https://via.placeholder.com/600x400?text=Producto" 
-               alt="Sin imagen">
-        </div>
+          <div class="image-box only-image">
+            <img *ngIf="producto.imagen"
+                 [src]="url + 'get-imagen/' + producto.imagen"
+                 [alt]="producto.nombre">
+            <img *ngIf="!producto.imagen"
+                 src="https://via.placeholder.com/600x400?text=Producto"
+                 alt="Sin imagen">
+          </div>
 
-        <div class="content">
-          <h3>{{ producto.nombre }}</h3>
-          <p><strong>Animal:</strong> {{ producto.animal }}</p>
-          <p><strong>Sabor:</strong> {{ producto.sabor }}</p>
-          <p><strong>Peso:</strong> {{ producto.kg }} kg</p>
-          <p class="price"><strong>${{ producto.precio }}</strong></p>
         </div>
       </div>
-    </div>
   </div>
 </div>

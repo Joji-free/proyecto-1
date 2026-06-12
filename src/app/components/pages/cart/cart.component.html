@@ -1,0 +1,96 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <h2 class="page-title text-center mb-4">Tu carrito</h2>
+
+  <!-- notification toast -->
+  <div *ngIf="notification" class="cart-toast" [ngClass]="{'success': notification.type === 'success', 'error': notification.type === 'error'}">
+    {{ notification.message }}
+  </div>
+
+  <div *ngIf="cart.items && cart.items.length > 0">
+    <div class="cart-card">
+      <div class="cart-list">
+        <div class="cart-item" *ngFor="let item of cart.items">
+          <div class="cart-item-left">
+            <div class="thumb">
+              <img *ngIf="item.imagen" [src]="url + 'get-imagen/' + item.imagen" [alt]="item.nombre" class="thumb-img" />
+              <div *ngIf="!item.imagen" class="thumb-circle">🐾</div>
+            </div>
+            <div class="cart-item-info">
+              <h5 class="item-name">{{ item.nombre }}</h5>
+              <span class="kind-badge" [ngClass]="{'badge-prod': item.kind === 'producto', 'badge-acc': item.kind === 'accesorio'}">{{ item.kind }}</span>
+            </div>
+          </div>
+
+          <div class="cart-item-right">
+            <div class="qty">
+              <button class="qty-btn" (click)="updateQty(item, -1)">-</button>
+              <span class="qty-count">{{ item.qty }}</span>
+              <button class="qty-btn" (click)="updateQty(item, 1)">+</button>
+            </div>
+
+            <div class="price">${{ (item.precio || 0) * (item.qty || 1) }}</div>
+
+            <button class="remove" (click)="remove(item)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <h4>Total: ${{ getTotal() }}</h4>
+      </div>
+
+      <button class="btn-proceed-pay" (click)="abrirPago()">Proceder a pagar</button>
+    </div>
+  </div>
+
+  <div *ngIf="!cart.items || cart.items.length === 0" class="text-center">
+    <p>Tu carrito está vacío.</p>
+  </div>
+
+  <div class="payment-modal-overlay" *ngIf="showPaymentModal" (click)="cerrarPago()"></div>
+
+  <div class="payment-modal" *ngIf="showPaymentModal">
+    <div class="payment-modal-header">
+      <h5>Selecciona tu método de pago</h5>
+      <button class="modal-close" (click)="cerrarPago()">×</button>
+    </div>
+
+    <div *ngIf="!selectedPaymentMethod" class="payment-options-grid">
+      <button class="payment-mini-card" (click)="seleccionarMetodo('paypal')">
+        <span class="mini-card-title">Pago con PayPal</span>
+        <span class="mini-card-subtitle">Paga con tu cuenta PayPal</span>
+      </button>
+
+      <button class="payment-mini-card" (click)="seleccionarMetodo('card')">
+        <span class="mini-card-title">Pago con tarjeta</span>
+        <span class="mini-card-subtitle">Crédito o débito</span>
+      </button>
+    </div>
+
+    <div *ngIf="selectedPaymentMethod === 'paypal'" class="payment-method-content">
+      <h6 class="method-title">Pago con PayPal</h6>
+      <div id="paypal-button-container-modal"></div>
+      <button class="btn-back-method" (click)="volverMetodos()">Volver</button>
+    </div>
+
+    <div *ngIf="selectedPaymentMethod === 'card'" class="payment-method-content">
+      <h6 class="method-title">Pago con tarjeta de crédito</h6>
+
+      <div class="card-form-grid">
+        <input type="text" [(ngModel)]="cardForm.nombre" placeholder="Nombre en la tarjeta" />
+        <input type="text" [(ngModel)]="cardForm.numero" placeholder="Número de tarjeta" />
+        <input type="text" [(ngModel)]="cardForm.expiracion" placeholder="MM/AA" />
+        <input type="password" [(ngModel)]="cardForm.cvv" placeholder="CVV" />
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-back-method" (click)="volverMetodos()">Volver</button>
+        <button class="btn-pay-card" (click)="pagarConTarjeta()">Pagar con tarjeta</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br><br><br><br><br><br>
+<app-footer></app-footer>

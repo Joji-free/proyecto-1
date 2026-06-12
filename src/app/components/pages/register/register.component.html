@@ -6,76 +6,98 @@
     <h2 class="register-title">Crear Cuenta</h2>
     <p class="register-subtitle">Regístrate para comenzar</p>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <!-- Mensajes de éxito/error -->
+    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
 
+    <form [formGroup]="form" (ngSubmit)="submit()">
 
       <!-- NOMBRE -->
       <div class="input-group">
         <label>Nombre Completo</label>
-        <input type="text" formControlName="nombre" placeholder="Tu nombre">
+        <input 
+          type="text" 
+          formControlName="nombre" 
+          placeholder="Tu nombre"
+          autocomplete="name">
 
-        <small *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid" class="error">
-          El nombre debe tener mínimo 3 caracteres.
+        <small *ngIf="getErrorMessage('nombre')" class="error">
+          {{ getErrorMessage('nombre') }}
         </small>
       </div>
-
 
       <!-- EMAIL -->
       <div class="input-group">
         <label>Correo Electrónico</label>
-        <input type="email" formControlName="email" placeholder="example@mail.com">
+        <input 
+          type="text" 
+          formControlName="email" 
+          placeholder="ejemplo@correo.com"
+          autocomplete="email">
 
-        <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="error">
-          Ingresa un correo válido.
+        <small *ngIf="getErrorMessage('email')" class="error">
+          {{ getErrorMessage('email') }}
         </small>
       </div>
 
+      <!-- PASSWORDS -->
+      <div class="password-row">
+        <div class="input-group password-box password-main">
+          <label>Contraseña</label>
+          <div class="password-wrapper">
+            <input 
+              [type]="showPass ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="new-password">
+            <button 
+              type="button" 
+              class="toggle-password eye-btn" 
+              (click)="showPass = !showPass" 
+              [attr.aria-pressed]="showPass" 
+              aria-label="Mostrar u ocultar contraseña">
+              👁️
+            </button>
+          </div>
 
-      <!-- PASSWORD -->
-      <div class="input-group">
-        <label>Contraseña</label>
-
-        <div class="password-wrapper">
-          <input 
-            [type]="showPass ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="••••••••">
-          <button type="button" class="toggle-password" (click)="showPass = !showPass">👁️</button>
+          <small *ngIf="getErrorMessage('password')" class="error">
+            {{ getErrorMessage('password') }}
+          </small>
         </div>
+        <br>
+        <div class="input-group password-box password-confirm">
+          <label>Confirmar Contraseña</label>
+          <div class="password-wrapper">
+            <input 
+              [type]="showPass2 ? 'text' : 'password'"
+              formControlName="password2"
+              placeholder="••••••••"
+              autocomplete="new-password">
+            <button 
+              type="button" 
+              class="toggle-password eye-btn" 
+              (click)="showPass2 = !showPass2" 
+              [attr.aria-pressed]="showPass2" 
+              aria-label="Mostrar u ocultar confirmar contraseña">
+              👁️
+            </button>
+          </div>
 
-        <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid" class="error">
-          La contraseña debe tener mínimo 6 caracteres.
-        </small>
-      </div>
-
-
-      <!-- CONFIRMAR PASSWORD -->
-      <div class="input-group">
-        <label>Confirmar Contraseña</label>
-
-        <div class="password-wrapper">
-          <input 
-            [type]="showPass2 ? 'text' : 'password'"
-            formControlName="password2"
-            placeholder="••••••••">
-          <button type="button" class="toggle-password" (click)="showPass2 = !showPass2">👁️</button>
+          <small *ngIf="getErrorMessage('password2')" class="error">
+            {{ getErrorMessage('password2') }}
+          </small>
         </div>
-
-        <small *ngIf="form.get('password2')?.touched && form.get('password2')?.hasError('noIguales')" class="error">
-          Las contraseñas no coinciden.
-        </small>
       </div>
-
 
       <!-- BOTÓN -->
-      <button class="btn-register-main" [disabled]="form.invalid">
-        Registrarme
+      <button class="btn-register-main" [disabled]="loading" type="submit">
+        {{ loading ? 'Registrando...' : 'Registrarme' }}
       </button>
 
       <!-- YA TIENES CUENTA -->
       <div class="login-box">
         <p>¿Ya tienes cuenta?</p>
-        <button class="btn-login-link" routerLink="/login">Iniciar Sesión</button>
+        <button type="button" class="btn-login-link" routerLink="/login">Iniciar Sesión</button>
       </div>
 
     </form>

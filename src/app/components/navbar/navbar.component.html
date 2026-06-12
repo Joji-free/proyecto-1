@@ -21,7 +21,8 @@
           <a class="nav-link" routerLink="/home">Inicio</a>
         </li>
 
-        <li class="nav-item dropdown">
+        <!-- Productos solo si está logueado -->
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             Productos
           </a>
@@ -40,18 +41,52 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" routerLink="/login">Iniciar Sesión</a>
-        </li>
-
-        <li class="nav-item">
           <a class="nav-link" routerLink="/metodos-pago">Métodos de Pago</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link nav-link-admin" routerLink="/admin" title="Panel de Administración">
-            <i class="bi bi-gear"></i> Admin
+        <!-- Carrito solo si está logueado -->
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link position-relative" routerLink="/cart">
+            <i class="bi bi-cart"></i> Carrito
+            <span *ngIf="cartCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+              {{ cartCount }}
+            </span>
           </a>
         </li>
+
+        <!-- Opciones según estado de autenticación -->
+        <ng-container *ngIf="!isLoggedIn">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Iniciar Sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register">Registrarse</a>
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <!-- Panel Admin solo para admins -->
+          <li class="nav-item" *ngIf="isAdmin">
+            <a class="nav-link nav-link-admin" routerLink="/admin" title="Panel de Administración">
+              <i class="bi bi-gear"></i> Admin
+            </a>
+          </li>
+
+          <!-- Información de usuario -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle"></i> {{ currentUser?.nombre }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><span class="dropdown-item-text">{{ currentUser?.email }}</span></li>
+              <li><span class="dropdown-item-text"><small>Rol: {{ isAdmin ? 'Administrador' : 'Cliente' }}</small></span></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+              </a></li>
+            </ul>
+          </li>
+        </ng-container>
 
       </ul>
 

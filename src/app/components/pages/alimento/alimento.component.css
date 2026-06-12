@@ -85,6 +85,17 @@
   gap: 8px;
 }
 
+.btn-add-cart {
+  background: #36a2f5;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-add-cart:hover { background:#2386d6; }
+
 .card-actions .btn {
   flex: 1;
   padding: 8px 12px;

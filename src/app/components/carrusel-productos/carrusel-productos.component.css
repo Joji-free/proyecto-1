@@ -19,12 +19,13 @@
 
 .carrusel-wrapper {
   position: relative;
-  width: 500px;
+  width: 100%;
+  max-width: 700px;
   height: 420px;
   margin: 0 auto;
-  padding: 30px;
+  padding: 12px; /* reduced padding so images can fill more area */
   background: white;
-  border-radius: 40px;
+  border-radius: 28px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
@@ -42,17 +43,17 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-radius: 30px;
-  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* gradient moved to card */
+  border-radius: 20px;
+  padding: 12px; /* small padding so gradient frames the image */
   opacity: 0;
   transform: translateY(100%) scale(0.85) rotateY(20deg);
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 /* Carta activa */
@@ -71,30 +72,39 @@
 }
 
 /* Carta siguiente */
-.card.next {
-  opacity: 0.4;
-  transform: translateY(100%) scale(0.85) rotateY(20deg);
-  z-index: 1;
-  filter: blur(2px);
-}
-
-/* Imagen */
 .image-box {
   position: relative;
   width: 100%;
-  height: 200px;
-  margin-bottom: 16px;
-  border-radius: 20px;
+  height: 100%; /* fill the card */
+  margin: 0;
+  border-radius: 14px;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent; /* transparent so card gradient shows through */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px; /* breathing room so image appears slightly smaller */
+  box-sizing: border-box;
 }
 
 .image-box img {
-  width: 100%;
+  width: auto;
   height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
-  transition: transform 0.6s ease;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* show the whole image */
+  border-radius: 10px; /* inner rounding for a neat frame */
+  transition: transform 0.45s ease, opacity 0.3s ease;
+  background: transparent;
+}
+.image-box img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* show the whole image */
+  border-radius: 10px; /* inner rounding for a neat frame */
+  transition: transform 0.45s ease, opacity 0.3s ease;
 }
 
 .card.active .image-box img {
@@ -215,8 +225,8 @@
 @media (max-width: 768px) {
   .carrusel-wrapper {
     width: 100%;
-    max-width: 400px;
-    height: auto;
+    max-width: 420px;
+    height: 260px;
   }
 
   .controls {

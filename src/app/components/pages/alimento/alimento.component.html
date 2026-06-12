@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 
 <div class="container mt-5">
-  <h1 class="text-center mb-5">Alimentos para Mascotas</h1>
+  <h1 class="page-title text-center mb-5">Alimentos para Mascotas</h1>
   
   <div class="alimentos-grid">
     <div class="alimento-card" *ngFor="let alimento of alimentos">
@@ -23,7 +23,24 @@
         <div class="card-details">
           <p><strong>Sabor:</strong> {{ alimento.sabor }}</p>
           <p><strong>Peso:</strong> {{ alimento.kg }} kg</p>
+          <p><strong>Stock:</strong> {{ alimento.stock }}</p>
           <p class="card-price"><strong>${{ alimento.precio }}</strong></p>
+        </div>
+        <div class="card-actions">
+          <ng-container *ngIf="confirmingId === alimento._id; else addBtn">
+            <div class="card-confirm">
+              <p class="confirm-text">¿Agregar este producto al carrito?</p>
+              <div class="confirm-actions">
+                <button class="btn-cancel" (click)="cancelConfirm()">Cancelar</button>
+                <button class="btn-confirm-delete" (click)="confirmAdd(alimento)">Agregar</button>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #addBtn>
+            <button class="btn-add-cart" [disabled]="!tieneStock(alimento)" (click)="addToCart(alimento)">
+              {{ tieneStock(alimento) ? 'Añadir al carrito' : 'Agotado' }}
+            </button>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -35,3 +52,11 @@
 </div>
 
 <app-footer></app-footer>
+
+<!-- Floating cart button (visible on alimentos) -->
+<a class="floating-cart" routerLink="/cart" title="Ver carrito">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bag-heart" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0M14 14V5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1M8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+  </svg>
+  <span *ngIf="cartCount > 0" class="floating-badge">{{ cartCount }}</span>
+</a>

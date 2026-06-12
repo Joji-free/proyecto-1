@@ -7,6 +7,7 @@ export class Alimento {
         public sabor: String,
         public kg: Number,
         public precio: Number,
+        public stock: Number,
         public imagen: String
         
 

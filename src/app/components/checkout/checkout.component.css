@@ -1,0 +1,12 @@
+.checkout-container{max-width:720px;margin:20px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+.checkout-container h2{margin:0 0 12px 0}
+#paypal-button-container{margin-top:12px}
+
+.cart-list{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+.cart-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;background:rgba(0,0,0,0.03)}
+.cart-item .thumb img{width:84px;height:60px;object-fit:cover;border-radius:6px}
+.cart-item .meta{flex:1}
+.cart-item .name{font-weight:700}
+.cart-item .qty{font-size:13px;color:#666}
+.cart-item .price{font-weight:700}
+.total{font-size:18px;margin-top:8px}
